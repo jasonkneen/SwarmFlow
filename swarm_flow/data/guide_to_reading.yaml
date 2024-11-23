@@ -1,0 +1,114 @@
+# Workflow Name and Description
+workflow:
+  version: "1.0"
+  name: "Guided reading"
+  description: "Guided reading of articles based on the original text and relevant online content"
+
+# LLM Settings
+llm_settings:
+  provider: "openai"
+
+# External Functions/Tools Settings
+functions:
+  - name: web_search
+    description: "Retrieve information via the internet"
+    parameters:
+      type: object
+      properties:
+        query:
+          description: "Search query"
+          type: string
+      required:
+        - query
+
+# Multi-Agent Settings
+agents:
+  - name: "Question Generation"
+    description: "Propose several key questions based on the article content"
+    instruction: |
+      You excel at analyzing the structure of various articles and extracting key points. After reading an article, you will propose a series of key questions based on its content. These questions form a logical chain of thought that helps users quickly grasp the core viewpoints and conclusions of the article.
+      Read the user's input content, then, in the form of a logical chain of thought, propose 2-4 key questions about the content. Each question must be complete and able to be independently answered via a search engine.
+
+      Specific requirements are as follows:
+      1. The chain of thought must be based on the content or concepts mentioned by the user; you may extend the questions but do not directly answer them.
+      2. Each question must be a complete sentence containing clear subject and object information, without any ambiguity.
+      3. Each question should be on a separate line.
+
+      Output format is as follows:
+      1. <Question 1>
+      2. <Question 2>
+      ...
+    output:
+      name: question_list
+      type: list
+    functions: []
+
+  - name: "Answer Generation"
+    description: "Answer each question in the list based on the article content"
+    instruction: |
+      Refer to the user's input content and use `web_search` to find answers to the questions. Be sure to retain the reference sources (web links).
+      Question: {{ question }}
+    for_each:
+      list: question_list
+      item: question
+      output: answer
+      format: |
+        Question: {{ question }}
+        Answer: {{ answer }}
+      execution: async
+    output:
+      name: qa_list
+      type: list
+    functions:
+      # The OpenAI API only supports function names in pure English
+      - web_search
+
+  - name: "Summary"
+    description: "Create a summary report by integrating the original text and the Q&A content"
+    instruction: |
+      You are a text editing expert who excels at extracting key information from complex data. Your task is to use this content, combined with your own knowledge, to generate a comprehensive, structured analysis and summary report of the article's key information in the form of a logical chain of thought.
+
+      <QA>
+      {% for idx in range(qa_list|length) %}
+      Q&A {{ idx+1 }}:
+      ```
+      {{ qa_list[idx] }}
+      ```
+      {% endfor %}
+      </QA>
+
+      The questions in <QA> are a logical chain of thought distilled from the user's input, intended to help the user quickly understand the core viewpoints and conclusions of the original text.
+      The answers in <QA> are primarily obtained through web searches.
+
+      Specific requirements are as follows:
+      1. Understand and analyze the information in <QA>, combine it with the user's original text and your own knowledge to provide a complete, structured summary in English, ensuring accuracy, clarity, and ease of understanding.
+      2. The content should be detailed while avoiding repetitive sentences. Pay close attention to the timeliness of the information; for content not from the user's original text, indicate the information source.
+      3. Structure the content in a "general-to-specific" format: first provide a content summary, highlighting key points prominently and ensuring smooth flow; then, based on the information in <QA>, expand with detailed explanations, ensuring semantic coherence.
+      4. Retain all web links from <QA> as reference materials.
+    output:
+      name: summary
+      type: string
+    functions: []
+
+# Workflow Execution Steps
+steps:
+  - name: "Step-1"
+    description: "Propose several key questions based on the article content"
+    order: 1
+    agent: "Question Generation"
+    execution: sync
+    prerequisite: []
+
+  - name: "Step-2"
+    description: "Answer each question in the list based on the article content (asynchronous execution)"
+    order: 2
+    agent: "Answer Generation"
+    execution: sync
+    prerequisite: []
+
+  - name: "Step-3"
+    description: "Create a summary report by integrating the original text and the Q&A content"
+    order: 3
+    agent: "Summary"
+    execution: sync
+    prerequisite: []

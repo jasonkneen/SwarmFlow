@@ -1,0 +1,8 @@
+beautifulsoup4
+duckduckgo_search
+jinja2
+openai
+pytz
+pyyaml
+requests
+streamlit

@@ -1,0 +1,172 @@
+# Workflow Name and Description
+workflow:
+  version: "1.0"
+  name: "Topic Debate"
+  description: "Multi-agent group chat mode where the pro and con sides freely debate the topic."
+
+# LLM Settings
+llm_settings:
+  provider: "openai"
+
+# Multi-Agent Settings
+agents:
+  - name: "Assistant"
+    description: "Responsible for selecting the next speaker from the candidate list"
+    instruction: |
+      <Conversation Record>
+      {% if conversation %}
+      {{ "\n\n".join(conversation[-4:]) }}
+      {% endif %}
+      </Conversation Record>
+
+      Based on the above conversation record, select an appropriate speaker from the participant list for the next round of dialogue.
+      Participant list: [Moderator, Affirmative, Negative]
+      Previous speaker: {{ active_agent }}
+      Please select the next speaker from the participant list, ensuring you skip the previous speaker.
+
+      Requirements:
+      1. If the previous speaker is empty, choose the Moderator.
+      2. If the previous speaker asked a question to other participants, you should choose the one who was asked.
+      3. If the previous speaker explicitly invited a participant to speak, you should choose the invited participant.
+      4. If there is no specific person who was asked or invited, you should prioritize participants who have not spoken yet or have spoken less.
+
+      Please fill in the speaker's name in the 'name' field of the following JSON data. Directly output the JSON result without any irrelevant information:
+      {
+        "name": <Speaker>
+      }
+    history_length: 0
+    output:
+      name: active_agent
+      type: json
+      key: name
+    functions: []
+
+  - name: "Moderator"
+    description: "Responsible for the opening remarks and answering participants' questions"
+    instruction: |
+      You are the debate moderator. Your specific duties are to facilitate the debate, answer questions directed at you, and decide when to conclude the debate.
+      Debate topic: {{ topic }}
+
+      <Conversation Record>
+      {% if conversation %}
+      {{ "\n\n".join(conversation[-20:]) }}
+      {% endif %}
+      </Conversation Record>
+
+      Please, based on the above conversation record, directly answer questions related to you, but do not participate in the debate.
+      Requirements:
+      1. Only output what you want to say; do not continue the dialogue.
+      2. Do not include inner thoughts, asides, or irrelevant narration.
+      3. If the conversation record is empty, please start with an opening remark and then invite the Affirmative side to present their views first.
+      4. The debate content must closely revolve around the topic; avoid deviating or over-elaborating. Only remind others if their speech clearly deviates from the topic.
+      5. The Affirmative and Negative sides should speak in turns.
+      6. You will provide a concise summary of the debate content. When the dialogue exceeds 10 rounds, both sides have fully expressed their views, and no new questions are raised, please conclude the discussion and output "[END]".
+
+      Please fill in what you want to say in the 'content' field of the following JSON data. Directly output the JSON result without any irrelevant information:
+      {
+        "role": "Moderator",
+        "content": <Your words>
+      }
+    stop_character: "\n\n"
+    history_length: 0
+    output:
+      name: speech
+      type: json
+      format: "{{ speech['role'] }}: {{ speech['content'] }}"
+      append_to:
+        - variable: conversation
+    functions: []
+
+  - name: "Affirmative"
+    description: "Argues from a positive, affirmative perspective"
+    instruction: |
+      In the debate, you play the role of the Affirmative side. Specific requirements are as follows:
+      1. You will argue from a positive, affirmative perspective.
+      2. Your viewpoint is opposite to that of the Negative side. When you believe the Negative's viewpoint is not universal, you will provide counterexamples against their viewpoint but cannot ask the opponent to provide examples for your viewpoint.
+      3. The debate content must closely revolve around the topic; avoid deviating or over-elaborating.
+      4. If you notice that the opponent's speech is deviating from the topic, promptly remind them and steer the conversation back.
+
+      Debate topic: {{ topic }}
+
+      <Conversation Record>
+      {% if conversation %}
+      {{ "\n\n".join(conversation[-20:]) }}
+      {% endif %}
+      </Conversation Record>
+
+      Please, based on the above conversation record, directly present your views or pose questions.
+      Requirements:
+      1. You usually directly state your viewpoint and, when necessary, may ask questions to the Negative side or the Moderator.
+      2. Before expressing your viewpoint or posing questions, you should first answer any questions raised by the previous speaker.
+      3. Only output what you want to say; do not continue the dialogue.
+      4. Do not include inner thoughts, asides, or irrelevant narration.
+
+      Please fill in what you want to say in the 'content' field of the following JSON data. Directly output the JSON result without any irrelevant information:
+      {
+        "role": "Affirmative",
+        "content": <Your words>
+      }
+    stop_character: "\n\n"
+    history_length: 0
+    output:
+      name: speech
+      type: json
+      format: "{{ speech['role'] }}: {{ speech['content'] }}"
+      append_to:
+        - variable: conversation
+    functions: []
+
+  - name: "Negative"
+    description: "Argues from a negative, denying perspective"
+    instruction: |
+      In the debate, you play the role of the Negative side. Specific requirements are as follows:
+      1. You will argue from a negative, denying perspective.
+      2. Your viewpoint is opposite to that of the Affirmative side. When you believe the Affirmative's viewpoint is not universal, you will provide counterexamples against their viewpoint but cannot ask the opponent to provide examples for your viewpoint.
+      3. The debate content must closely revolve around the topic; avoid deviating or over-elaborating.
+      4. If you notice that the opponent's speech is deviating from the topic, promptly remind them and steer the conversation back.
+
+      Debate topic: {{ topic }}
+
+      <Conversation Record>
+      {% if conversation %}
+      {{ "\n\n".join(conversation[-20:]) }}
+      {% endif %}
+      </Conversation Record>
+
+      Please, based on the above conversation record, directly present your views or pose questions.
+      Requirements:
+      1. You usually directly state your viewpoint and, when necessary, may ask questions to the Affirmative side or the Moderator.
+      2. Before expressing your viewpoint or posing questions, you should first answer any questions raised by the previous speaker.
+      3. Only output what you want to say; do not continue the dialogue.
+      4. Do not include inner thoughts, asides, or irrelevant narration.
+
+      Please fill in what you want to say in the 'content' field of the following JSON data. Directly output the JSON result without any irrelevant information:
+      {
+        "role": "Negative",
+        "content": <Your words>
+      }
+    stop_character: "\n\n"
+    history_length: 0
+    output:
+      name: speech
+      type: json
+      format: "{{ speech['role'] }}: {{ speech['content'] }}"
+      append_to:
+        - variable: conversation
+    functions: []
+
+# Workflow Execution Steps
+steps:
+  - name: "Step-1"
+    description: "Select the next speaker from all participants, excluding the previous speaker"
+    order: 1
+    agent: "Assistant"
+    execution: sync
+    prerequisite: []
+
+  - name: "Step-2"
+    description: "The selected speaker expresses their views or poses questions"
+    order: 2
+    agent: "{{ active_agent }}"
+    execution: sync
+    prerequisite: []

@@ -1,0 +1,1 @@
+streamlit run simple_ui.py

@@ -1,0 +1,114 @@
+# 工作流名称和描述
+workflow:
+  version: "1.0"
+  name: "文章导读"
+  description: "基于原文以及网络相关内容进行导读"
+
+# LLM设置
+llm_settings:
+  provider: "openai"
+
+# 外部函数/工具设置
+functions:
+  - name: web_search
+    description: "通过互联网检索信息"
+    parameters:
+      type: object
+      properties:
+        query:
+          description: "检索请求"
+          type: string
+      required:
+        - query
+
+# 多Agent设置
+agents:
+  - name: "提问"
+    description: "针对文章内容提出几个关键问题"
+    instruction: |
+      你善于梳理各类文章的脉络并提炼要点。你会在阅读完文章后，针对文章内容提出一系列关键问题。通过这些问题，可以形成一个逻辑递进的思考链路，帮助用户快速了解文章的核心观点和结论性内容。
+      阅读用户输入的内容，然后以思考链路的方式提出 2-4 个关于该内容的关键问题。每个问题都必须完整，能够独立通过搜索引擎获得答案。
+
+      具体要求如下:
+      1. 思考链路必须基于用户提到的内容或概念，可以延伸问题，但不要直接回答问题。
+      2. 每一步的问题必须是完整的句子，必须包含明确的主体和客体信息，不能有任何歧义。
+      3. 每个问题占一行。
+
+      输出格式如下：
+      1. <问题1>
+      2. <问题2>
+      ...
+    output:
+      name: question_list
+      type: list
+    functions: []
+
+  - name: "解答"
+    description: "根据文章内容逐条回答列表中的问题"
+    instruction: |
+      参考用户输入的内容，使用`web_search`搜索问题的答案，要保留参考来源（网络链接）。
+      问题：{{ question }}
+    for_each:
+      list: question_list
+      item: question
+      output: answer
+      format: |
+        问题：{{ question }}
+        回答：{{ answer }}
+      execution: async
+    output:
+      name: qa_list
+      type: list
+    functions:
+      # OpenAI API只支持纯英文函数名，Qwen支持中文函数名
+      - web_search
+
+  - name: "汇总"
+    description: "结合原文和问答内容形成总结报告"
+    instruction: |
+      你是一个文本编辑专家，你非常擅长从繁杂的信息中提取关键信息。你的任务是根据这些内容结合你自身的知识，以思考链路的方式，生成一个完整的结构化文章关键信息拆解和总结报告。
+
+      <问答>
+      {% for idx in range(qa_list|length) %}
+      问答 {{ idx+1 }}：
+      ```
+      {{ qa_list[idx] }}
+      ```
+      {% endfor %}
+      </问答>
+
+      <问答> 中的问题是根据用户输入内容提炼出的逻辑递进的思考链路，用于帮助用户快速了解原文的核心观点和结论性内容。
+      <问答> 中的答案主要是通过网络搜索获得。
+
+      具体要求如下：
+      1. 理解和分析 <问答> 中的信息，结合用户原文和你自身的知识，确保提供完整、结构化的中文总结，要求准确、清晰、易于理解。
+      2. 内容详细，同时避免重复语句，需要高度注意信息的时效性，对于不是来自用户原文的内容，要注明信息来源。
+      3. 内容结构化，以“总-分”结构，先做内容总结，提炼要点时重点突出、通顺流畅；再结合用户原文，基于 <问答> 中的信息逐条展开详细阐述，确保语义连贯。
+      4. 保留 <问答> 中的所有网页链接，作为参考资料。
+    output:
+      name: summary
+      type: string
+    functions: []
+
+# 工作流执行步骤
+steps:
+  - name: "Step-1"
+    description: "针对文章内容提出几个关键问题"
+    order: 1
+    agent: "提问"
+    execution: sync
+    prerequisite: []
+
+  - name: "Step-2"
+    description: "根据文章内容逐条回答列表中的问题（异步执行）"
+    order: 2
+    agent: "解答"
+    execution: sync
+    prerequisite: []
+
+  - name: "Step-3"
+    description: "结合原文和问答内容形成总结报告"
+    order: 3
+    agent: "汇总"
+    execution: sync
+    prerequisite: []
