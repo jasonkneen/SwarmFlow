@@ -299,7 +299,6 @@ class WorkflowExecutor:
                 return func
         return None
 
-    # Agent 交接
     def transfer_to_agent(self, agent_name, query):
         self.log(f"TRANSFER -> {agent_name}", query)
         self.context_variables["transfer_to"] = {"status": f"Transfer to '{agent_name}'", "details": query}

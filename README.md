@@ -28,7 +28,7 @@ cd SwarmFlow
 
 #### 3.1.2. Configure the large language model (LLM)
 
-Edit the configuration file `modules/config.py`:
+Edit the configuration file `swarm_flow/modules/config.py`:
 - `llm_settings`: Set fields like `base_url`, `api_key`, and `default_model` as needed.
 - `tool_settings`: Configure external tools, such as search engine API settings. Use `web_search_proxy` to set up a proxy for the search engine API.
 

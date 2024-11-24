@@ -28,7 +28,7 @@ cd SwarmFlow
 
 #### 3.1.2. 配置大语言模型（LLM）
 
-编辑配置文件 `modules/config.py`:
+编辑配置文件 `swarm_flow/modules/config.py`:
 - `llm_settings`：根据需要设置对应的`base_url`、`api_key`和`default_model`等字段。
 - `tool_settings`：外部工具设置，如搜索引擎接口设置等。其中`web_search_proxy`用于为搜索引擎 API 配置代理，否则国内无法正常调用`duckduckgo`API。
 
@@ -105,7 +105,7 @@ python debate_competition.py
 
 ### 4.1. YAML 基础语法
 
-- ‌大小写敏感‌：YAML对大小写敏感。
+- ‌大小写敏感‌：YAML 对大小写敏感。
 - ‌缩进‌：使用空格进行缩进，通常使用两个或四个空格，不允许使用 Tab 键。相同层级的元素左侧对齐。
 - ‌注释‌：使用 # 符号表示注释，从 # 到行尾的内容都会被解析器忽略‌。
 
