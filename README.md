@@ -31,7 +31,7 @@ cd SwarmFlow
 
 Edit the configuration file `swarm_flow/config.py`:
 - `llm_settings`: Set fields like `base_url`, `api_key`, and `default_model` as needed.
-- `rag_settings`：Set fields as needed.
+- `rag_settings`：Used to configure RAG modules.
 - `tool_settings`: Configure external tools, such as search engine API settings. Use `web_search_proxy` to set up a proxy for the search engine API.
 
 *Note: The `llm_provider` field in the `workflow` section of the workflow configuration file must match a subsection name under `llm_settings` in the `config.py` file (e.g., `openai`).*

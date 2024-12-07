@@ -30,8 +30,8 @@ cd SwarmFlow
 #### 3.1.2. 配置大语言模型（LLM）
 
 编辑配置文件 `swarm_flow/config.py`:
-- `llm_settings`：用于配置LLM，根据需要设置对应的`base_url`、`api_key`和`default_model`等字段。
-- `rag_settings`：用于配置RAG，根据需要设置对应字段。
+- `llm_settings`：用于配置 LLM，根据需要设置对应的`base_url`、`api_key`和`default_model`等字段。
+- `rag_settings`：用于配置 RAG，根据需要设置对应字段。
 - `tool_settings`：用于配置外部工具，如搜索引擎接口设置等。其中`web_search_proxy`用于为搜索引擎 API 配置代理，否则国内无法正常调用`duckduckgo`API。
 
 *注：工作流配置文件中`workflow`的`llm_provider`字段，对应`config.py`文件中`llm_settings`的子项名称（例如`openai`），二者必须匹配。*
