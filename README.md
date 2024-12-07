@@ -66,14 +66,14 @@ Run the following command:
 python basic.py
 ```
 
-Snapshot:
-![snapshot](docs/resources/snapshot_basic.png)
-
 The corresponding workflow configuration file for this example is `data/workflows/basic.yaml`.
 
 To test whether the workflow correctly handles time-sensitive information, try asking:
 - "What day is it today?"
 - "What is the outcome of the 2024 US election?"
+
+Snapshot:
+![snapshot](docs/resources/snapshot_basic.png)
 
 #### 3.2.2. Guided reading of articles
 
@@ -83,12 +83,12 @@ Place the content of the article you want to interpret into `guide_to_reading.tx
 python guide_to_reading.py
 ```
 
-Snapshot:
-![snapshot](docs/resources/snapshot_guide_to_reading.png)
-
 The corresponding workflow configuration file is `data/workflows/guide_to_reading.yaml`.
 
 If you want to view all debugging information, edit `guide_to_reading.py` and set `debug` to `True`.
+
+Snapshot:
+![snapshot](docs/resources/snapshot_guide_to_reading.png)
 
 #### 3.2.3. Simulated debate competition
 
@@ -98,14 +98,14 @@ Run:
 python debate_competition.py
 ```
 
-Snapshot:
-![snapshot](docs/resources/snapshot_debate_competition.png)
-
 After the program starts, you'll need to input a debate topic, such as:
 - "Technology makes life better."
 - "Law is more important than morality."
 
 This example simulates a pro and con debate mode. The corresponding workflow configuration file is `data/workflows/debate_competition.yaml`.
+
+Snapshot:
+![snapshot](docs/resources/snapshot_debate_competition.png)
 
 #### 3.2.4. Retrieval-Augmented Generation (RAG)
 
@@ -114,12 +114,12 @@ Run:
 python rag.py
 ```
 
-Snapshot:
-![snapshot](docs/resources/snapshot_rag.png)
-
 The corresponding workflow configuration file for this example is `data/workflows/rag.yaml`.
 
 If you want to verify that the workflow can retrieve the correct information from the knowledge base, try asking: What is CBT?
+
+Snapshot:
+![snapshot](docs/resources/snapshot_rag.png)
 
 ### 3.3. Graphical user interface
 
@@ -130,7 +130,8 @@ Running `streamlit run simple_ui.py` will start the `streamlit` service in the b
 1. Click the "Browse files" button, select `basic.yaml` from the `data` directory, or drag and drop the file to load it.
 2. View or modify the configurations as needed.
 3. Switch to the "Test" tab, paste the article content into the "User Input" box, and press Enter.
-4. Check whether the output meets your expectations.
+4. Built-in RAG module, compatible with various embedding methods.
+5. Check whether the output meets your expectations.
 
 Snapshot-1:
 ![ui_edit](docs/resources/snapshot_simple_ui_1.png)
@@ -256,17 +257,17 @@ steps:
     # 'sync': Synchronous execution; the next step cannot proceed until the current step is complete
     # 'async': Asynchronous execution (multiple steps in parallel); the next step does not need to wait for the previous step to complete
     execution: sync
-    # If previous steps have 'execution' set to 'async' and the current step depends on their results, list the prerequisite steps in 'prerequisite'
-    # Example:
-    # prerequisite:
-    #   - step1
-    #   - step2
     # 'output' stores the agent's output result
     output:
       # This variable can be referenced elsewhere by {{ assistant_output }}
       name: assistant_output
       # Supports three output formats: string, list, or json. The default is string.
       type: string
+    # If previous steps have 'execution' set to 'async' and the current step depends on their results, list the prerequisite steps in 'prerequisite'
+    # Example:
+    # prerequisite:
+    #   - step1
+    #   - step2
     prerequisite: []
 ```
 

@@ -13,7 +13,8 @@
 1. 工作流配置文件遵循 YAML 语法；
 2. 工作流配置文件兼容 Jinja2 模板，可在不修改代码的情况下，通过 Jinja2 语法控制分支、循环或传递变量；
 3. 融合 Swarm 的特性，工作流内语言模型可根据用户请求自主切换智能体或调用外部函数 / 工具；
-4. 提供极简的 UI 界面，便于业务人员配置、调试工作流。
+4. 内置 RAG 模块，兼容多种 embedding 方法；
+5. 提供极简的 UI 界面，便于业务人员配置、调试工作流。
 
 ## 3. 如何使用
 
@@ -64,14 +65,14 @@ cd examples/cn
 python basic.py
 ```
 
-截图：
-![snapshot](docs/resources/snapshot_basic_cn.png)
-
 与此示例对应的工作流配置文件为`data/workflows/cn/basic.yaml`。
 
 若希望验证工作流能否正确处理“时效性”信息，可尝试以下提问：
 - 今天是星期几？
 - 今年国庆节前后，中国股市的总体情况如何？
+
+截图：
+![snapshot](docs/resources/snapshot_basic_cn.png)
 
 #### 3.2.2. 文章导读
 
@@ -80,12 +81,12 @@ python basic.py
 python guide_to_reading.py
 ```
 
-截图：
-![snapshot](docs/resources/snapshot_guide_to_reading_cn.png)
-
 与此示例对应的工作流配置文件为`data/workflows/cn/guide_to_reading.yaml`。 
 
 若希望查看所有调试信息，可编辑`guide_to_reading.py`，将`debug`设置为`True`。
+
+截图：
+![snapshot](docs/resources/snapshot_guide_to_reading_cn.png)
 
 #### 3.2.3. 模拟辩论赛
 
@@ -94,12 +95,12 @@ python guide_to_reading.py
 python debate_competition.py
 ```
 
-截图：
-![snapshot](docs/resources/snapshot_debate_competition_cn.png)
-
 程序启动后需要用户输入辩论主题，例如：“科技让生活更美好”，“法律比道德更重要”等。
 
 示例为正反双方辩论模式，对应的工作流配置文件为`data/workflows/cn/debate_competition.yaml`。
+
+截图：
+![snapshot](docs/resources/snapshot_debate_competition_cn.png)
 
 #### 3.2.4. 检索增强生成（RAG）
 
@@ -108,12 +109,12 @@ python debate_competition.py
 python rag.py
 ```
 
-截图：
-![snapshot](docs/resources/snapshot_rag_cn.png)
-
 与此示例对应的工作流配置文件为`data/workflows/cn/rag.yaml`。
 
 若希望验证工作流能否从知识库中检索到正确的信息，可尝试提问：什么是CBT？
+
+截图：
+![snapshot](docs/resources/snapshot_rag_cn.png)
 
 ### 3.3. 图形界面
 
@@ -247,16 +248,16 @@ steps:
     # sync：同步执行，必须等待当前 step 完成才会执行下一个 step
     # async：异步执行（多个 step 并行），下一步无需等待上一步完成
     execution: sync
-    # 若前一个或前几个 step execution 为 async，且当前 step 依赖前几个 step 的结果，需要在 prerequisite 中以数组的形式填入前置 step name，例如：
-    # prerequisite:
-    #   - step1
-    #   - step2
     # output 用于保存 agent 的输出结果
     output:
       # 在其他位置可以通过 {{ assistant_output }} 引用此变量
       name: assistant_output
       # 目前支持三种输出格式：string, list, json，默认值为 string
       type: string
+    # 若前一个或前几个 step execution 为 async，且当前 step 依赖前几个 step 的结果，需要在 prerequisite 中以数组的形式填入前置 step name，例如：
+    # prerequisite:
+    #   - step1
+    #   - step2
     prerequisite: []
 ```
 
