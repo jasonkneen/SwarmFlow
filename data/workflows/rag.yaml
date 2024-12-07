@@ -1,0 +1,89 @@
+# Workflow Settings
+workflow:
+  version: "1.1"
+  name: "Multi-turn Q&A Based on Knowledge Base"
+  description: "Multi-turn Q&A workflow that retrieves content from a knowledge base as needed."
+  llm_provider: "openai"
+
+# External Function/Tool Settings
+functions:
+  - name: simple_rag
+    description: "Retrieve content related to the user's request from the knowledge base"
+    parameters:
+      type: object
+      properties:
+        rag_provider:
+          description: "RAG service provider"
+          type: string
+          enum:
+            # Must match a subsection name under rag_settings in config.py
+            - "openai"
+        kb_path:
+          description: "Knowledge base path"
+          type: string
+          enum:
+            - "../data/knowledge_bases/vector_stores/example_en"
+        kb_name:
+          description: "Knowledge base name"
+          type: string
+          enum:
+            - "default"
+        query:
+          description: "User request"
+          type: string
+      required:
+        - rag_provider
+        - kb_path
+        - kb_name
+        - query
+
+  - name: transfer_to_agent
+    description: "Transfer the user's request to another Agent"
+    parameters:
+      type: object
+      properties:
+        agent_name:
+          description: "Transfer to the Agent named <agent_name>"
+          type: string
+          enum:
+            - "RAG"
+        query:
+          description: "User request"
+          type: string
+      required:
+        - agent_name
+        - query
+
+# Multi-Agent Settings
+agents:
+  - name: "AI Assistant"
+    description: "AI Assistant responsible for task distribution and returning results to the user"
+    instruction: |
+      When the user's request involves the following topics, use `transfer_to_agent` to hand it over to `RAG` for processing:
+      ["CBT", "Cognitive Therapy", "Behavioral Therapy", "Beliefs", "Psychology", "Mental Health", "Depression", "Anxiety"]
+
+      Output requirements:
+      1. Do not alter the original text returned by `RAG` from the knowledge base, and do not provide any additional explanations.
+      2. If there is no relevant content in the knowledge base, please respond with "I'm sorry, there is no relevant content in the knowledge base."
+    functions:
+      - transfer_to_agent
+
+  - name: "RAG"
+    description: "Retrieve relevant content from the knowledge base"
+    instruction: |
+      Always use `simple_rag` to retrieve content related to the user's request from the knowledge base and output the results.
+      Output requirements: Directly output the complete content from the <KB>, do not alter the original text from the <KB>, and do not provide any additional explanations.
+    functions:
+      - simple_rag
+
+# Workflow Execution Steps
+steps:
+  - name: "Chat"
+    description: "Multi-Agent collaboration using RAG technology to enhance output quality"
+    order: 1
+    agent: "AI Assistant"
+    execution: sync
+    output:
+      name: output
+      type: string
+    prerequisite: []

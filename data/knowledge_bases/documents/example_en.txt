@@ -1,0 +1,66 @@
+Cognitive behavioral therapy (CBT) is a form of psychotherapy that aims to reduce symptoms of various mental health conditions, primarily depression, PTSD and anxiety disorders. Cognitive behavioral therapy focuses on challenging and changing cognitive distortions (such as thoughts, beliefs, and attitudes) and their associated behaviors to improve emotional regulation and develop personal coping strategies that target solving current problems. Though it was originally designed to treat depression, its uses have been expanded to include many issues and the treatment of many mental health and other conditions, including anxiety, substance use disorders, marital problems, ADHD, and eating disorders. CBT includes a number of cognitive or behavioral psychotherapies that treat defined psychopathologies using evidence-based techniques and strategies.
+
+CBT is a common form of talk therapy based on the combination of the basic principles from behavioral and cognitive psychology. It is different from other approaches to psychotherapy, such as the psychoanalytic approach, where the therapist looks for the unconscious meaning behind the behaviors and then formulates a diagnosis. Instead, CBT is a "problem-focused" and "action-oriented" form of therapy, meaning it is used to treat specific problems related to a diagnosed mental disorder. The therapist's role is to assist the client in finding and practicing effective strategies to address the identified goals and to alleviate symptoms of the disorder. CBT is based on the belief that thought distortions and maladaptive behaviors play a role in the development and maintenance of many psychological disorders and that symptoms and associated distress can be reduced by teaching new information-processing skills and coping mechanisms.
+
+When compared to psychoactive medications, review studies have found CBT alone to be as effective for treating less severe forms of depression, and borderline personality disorder. Some research suggests that CBT is most effective when combined with medication for treating mental disorders, such as major depressive disorder. CBT is recommended as the first line of treatment for the majority of psychological disorders in children and adolescents, including aggression and conduct disorder. Researchers have found that other bona fide therapeutic interventions were equally effective for treating certain conditions in adults. Along with interpersonal psychotherapy (IPT), CBT is recommended in treatment guidelines as a psychosocial treatment of choice.
+
+
+### History
+
+#### Early roots
+The prevailing body of research consistently indicates that maintaining a faith or belief system generally contributes positively to mental well-being. Religious institutions have proactively established charities, such as the Samaritans, to address mental health issues. Cognitive behavioral therapy has undergone scrutiny as studies investigating the impact of religious belief and practices have gained prominence. Numerous randomized controlled trials have explored the correlation of CBT within diverse religious frameworks, including Judaism, Taoism, and predominantly, Christianity.
+
+#### Buddhism
+Principles originating from Buddhism have significantly impacted the evolution of various new forms of CBT, including dialectical behavior therapy, mindfulness-based cognitive therapy, spirituality-based CBT, and compassion-focused therapy.
+
+#### Philosophy
+Precursors of certain fundamental aspects of CBT have been identified in various ancient philosophical traditions, particularly Stoicism. Stoic philosophers, particularly Epictetus, believed logic could be used to identify and discard false beliefs that lead to destructive emotions, which has influenced the way modern cognitive-behavioral therapists identify cognitive distortions that contribute to depression and anxiety. Aaron T. Beck's original treatment manual for depression states, "The philosophical origins of cognitive therapy can be traced back to the Stoic philosophers". Another example of Stoic influence on cognitive theorists is Epictetus on Albert Ellis. A key philosophical figure who influenced the development of CBT was John Stuart Mill through his creation of Associationism, a predecessor of classical conditioning and behavioral theory.
+
+The modern roots of CBT can be traced to the development of behavior therapy in the early 20th century, the development of cognitive therapy in the 1960s, and the subsequent merging of the two.
+
+
+### Behavioral therapy
+
+John B. Watson
+Groundbreaking work of behaviorism began with John B. Watson and Rosalie Rayner's studies of conditioning in 1920. Behaviorally-centered therapeutic approaches appeared as early as 1924 with Mary Cover Jones' work dedicated to the unlearning of fears in children. These were the antecedents of the development of Joseph Wolpe's behavioral therapy in the 1950s. It was the work of Wolpe and Watson, which was based on Ivan Pavlov's work on learning and conditioning, that influenced Hans Eysenck and Arnold Lazarus to develop new behavioral therapy techniques based on classical conditioning.
+
+During the 1950s and 1960s, behavioral therapy became widely used by researchers in the United States, the United Kingdom, and South Africa. Their inspiration was by the behaviorist learning theory of Ivan Pavlov, John B. Watson, and Clark L. Hull.
+
+In Britain, Joseph Wolpe, who applied the findings of animal experiments to his method of systematic desensitization, applied behavioral research to the treatment of neurotic disorders. Wolpe's therapeutic efforts were precursors to today's fear reduction techniques. British psychologist Hans Eysenck presented behavior therapy as a constructive alternative.
+
+At the same time as Eysenck's work, B. F. Skinner and his associates were beginning to have an impact with their work on operant conditioning. Skinner's work was referred to as radical behaviorism and avoided anything related to cognition. However, Julian Rotter in 1954 and Albert Bandura in 1969 contributed to behavior therapy with their works on social learning theory by demonstrating the effects of cognition on learning and behavior modification. The work of Claire Weekes in dealing with anxiety disorders in the 1960s is also seen as a prototype of behavior therapy.
+
+The emphasis on behavioral factors has been described as the "first wave" of CBT.
+
+
+### Cognitive therapy
+
+One of the first therapists to address cognition in psychotherapy was Alfred Adler, notably with his idea of basic mistakes and how they contributed to creation of unhealthy behavioral and life goals. Abraham Low believed that someone's thoughts were best changed by changing their actions. Adler and Low influenced the work of Albert Ellis, who developed the earliest cognitive-based psychotherapy called rational emotive behavioral therapy, or REBT. The first version of REBT was announced to the public in 1956.
+
+In the late 1950s, Aaron T. Beck was conducting free association sessions in his psychoanalytic practice. During these sessions, Beck noticed that thoughts were not as unconscious as Freud had previously theorized, and that certain types of thinking may be the culprits of emotional distress. It was from this hypothesis that Beck developed cognitive therapy, and called these thoughts "automatic thoughts". He first published his new methodology in 1967, and his first treatment manual in 1979. Beck has been referred to as "the father of cognitive behavioral therapy".
+
+It was these two therapies, rational emotive therapy, and cognitive therapy, that started the "second wave" of CBT, which emphasized cognitive factors.
+
+
+### Merger of behavioral and cognitive therapies
+
+Although the early behavioral approaches were successful in many so-called neurotic disorders, they had little success in treating depression. Behaviorism was also losing popularity due to the cognitive revolution. The therapeutic approaches of Albert Ellis and Aaron T. Beck gained popularity among behavior therapists, despite the earlier behaviorist rejection of mentalistic concepts like thoughts and cognitions. Both of these systems included behavioral elements and interventions, with the primary focus being on problems in the present.
+
+In initial studies, cognitive therapy was often contrasted with behavioral treatments to see which was most effective. During the 1980s and 1990s, cognitive and behavioral techniques were merged into cognitive behavioral therapy. Pivotal to this merging was the successful development of treatments for panic disorder by David M. Clark in the UK and David H. Barlow in the US.
+
+Over time, cognitive behavior therapy came to be known not only as a therapy, but as an umbrella term for all cognitive-based psychotherapies. These therapies include, but are not limited to, REBT, cognitive therapy, acceptance and commitment therapy, dialectical behavior therapy, metacognitive therapy, metacognitive training, reality therapy/choice theory, cognitive processing therapy, EMDR, and multimodal therapy.
+
+This blending of theoretical and technical foundations from both behavior and cognitive therapies constituted the "third wave" of CBT. The most prominent therapies of this third wave are dialectical behavior therapy and acceptance and commitment therapy. Despite the increasing popularity of third-wave treatment approaches, reviews of studies reveal there may be no difference in the effectiveness compared with non-third wave CBT for the treatment of depression.
+
+
+### Medical uses
+
+In adults, CBT has been shown to be an effective part of treatment plans for anxiety disorders, body dysmorphic disorder, depression, eating disorders, chronic low back pain, personality disorders, psychosis, schizophrenia, substance use disorders, and bipolar disorder. It is also effective as part of treatment plans in the adjustment, depression, and anxiety associated with fibromyalgia, and as part of the treatment after spinal cord injuries.
+
+In children or adolescents, CBT is an effective part of treatment plans for anxiety disorders, body dysmorphic disorder, depression and suicidality, eating disorders and obesity, obsessive–compulsive disorder (OCD), and post-traumatic stress disorder (PTSD), tic disorders, trichotillomania, and other repetitive behavior disorders. CBT has also been used to help improve a variety of childhood disorders, including depressive disorders and various anxiety disorders. CBT has shown to be the most effective intervention for people exposed to adverse childhood experiences in the form of abuse or neglect.
+
+Criticism of CBT sometimes focuses on implementations (such as the UK IAPT) which may result initially in low quality therapy being offered by poorly trained practitioners. However, evidence supports the effectiveness of CBT for anxiety and depression.
+
+Evidence suggests that the addition of hypnotherapy as an adjunct to CBT improves treatment efficacy for a variety of clinical issues.
+
+The United Kingdom's National Institute for Health and Care Excellence (NICE) recommends CBT in the treatment plans for a number of mental health difficulties, including PTSD, OCD, bulimia nervosa, and clinical depression.

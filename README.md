@@ -28,11 +28,12 @@ cd SwarmFlow
 
 #### 3.1.2. Configure the large language model (LLM)
 
-Edit the configuration file `swarm_flow/modules/config.py`:
+Edit the configuration file `swarm_flow/config.py`:
 - `llm_settings`: Set fields like `base_url`, `api_key`, and `default_model` as needed.
+- `rag_settings`：Set fields as needed.
 - `tool_settings`: Configure external tools, such as search engine API settings. Use `web_search_proxy` to set up a proxy for the search engine API.
 
-*Note: The `provider` field in the `llm_settings` section of the workflow configuration file must match a subsection name under `llm_settings` in the `config.py` file (e.g., `openai`).*
+*Note: The `llm_provider` field in the `workflow` section of the workflow configuration file must match a subsection name under `llm_settings` in the `config.py` file (e.g., `openai`).*
 
 #### 3.1.3. Install python dependencies
 
@@ -54,7 +55,7 @@ pip install -r requirements.txt
 Navigate to the `examples` directory:
 
 ```shell
-cd swarm_flow/examples
+cd examples
 ```
 
 #### 3.2.1. Multi-turn conversation (with search engine integration)
@@ -62,10 +63,13 @@ cd swarm_flow/examples
 Run the following command:
 
 ```shell
-python base.py
+python basic.py
 ```
 
-The corresponding workflow configuration file for this example is `data/base.yaml`.
+Snapshot:
+![snapshot](docs/resources/snapshot_basic.png)
+
+The corresponding workflow configuration file for this example is `data/workflows/basic.yaml`.
 
 To test whether the workflow correctly handles time-sensitive information, try asking:
 - "What day is it today?"
@@ -79,7 +83,10 @@ Place the content of the article you want to interpret into `guide_to_reading.tx
 python guide_to_reading.py
 ```
 
-The corresponding workflow configuration file is `data/guide_to_reading.yaml`.
+Snapshot:
+![snapshot](docs/resources/snapshot_guide_to_reading.png)
+
+The corresponding workflow configuration file is `data/workflows/guide_to_reading.yaml`.
 
 If you want to view all debugging information, edit `guide_to_reading.py` and set `debug` to `True`.
 
@@ -91,22 +98,45 @@ Run:
 python debate_competition.py
 ```
 
+Snapshot:
+![snapshot](docs/resources/snapshot_debate_competition.png)
+
 After the program starts, you'll need to input a debate topic, such as:
 - "Technology makes life better."
 - "Law is more important than morality."
 
-This example simulates a pro and con debate mode. The corresponding workflow configuration file is `data/debate_competition.yaml`.
+This example simulates a pro and con debate mode. The corresponding workflow configuration file is `data/workflows/debate_competition.yaml`.
+
+#### 3.2.4. Retrieval-Augmented Generation (RAG)
+
+Run:
+```shell
+python rag.py
+```
+
+Snapshot:
+![snapshot](docs/resources/snapshot_rag.png)
+
+The corresponding workflow configuration file for this example is `data/workflows/rag.yaml`.
+
+If you want to verify that the workflow can retrieve the correct information from the knowledge base, try asking: What is CBT?
 
 ### 3.3. Graphical user interface
 
-Running `./run.sh` will start the `streamlit` service in the background. You can access the UI by visiting `http://localhost:8501` in your browser, making it easier to edit and debug workflows.
+Running `streamlit run simple_ui.py` will start the `streamlit` service in the background. You can access the UI by visiting `http://localhost:8501` in your browser, making it easier to edit and debug workflows.
 
 **Basic Operations (using the "Article Guided Reading" workflow as an example):**
 
-1. Click the "Browse files" button, select `guide_to_reading.yaml` from the `data` directory, or drag and drop the file to load it.
+1. Click the "Browse files" button, select `basic.yaml` from the `data` directory, or drag and drop the file to load it.
 2. View or modify the configurations as needed.
 3. Switch to the "Test" tab, paste the article content into the "User Input" box, and press Enter.
 4. Check whether the output meets your expectations.
+
+Snapshot-1:
+![ui_edit](docs/resources/snapshot_simple_ui_1.png)
+
+Snapshot-2:
+![ui_test](docs/resources/snapshot_simple_ui_2.png)
 
 ## 4. Explanation of the workflow YAML file
 
@@ -148,21 +178,18 @@ YAML supports three primary data structures: **scalars**, **arrays**, and **dict
 
 ### 4.3. Examples
 
-The `data` directory contains several built-in workflow files. Let's look at `base.yaml` and `debate_competition.yaml` as examples.
+The `data` directory contains several built-in workflow files. Let's look at `basic.yaml` and `debate_competition.yaml` as examples.
 
-#### 4.3.1. `base.yaml`
+#### 4.3.1. `basic.yaml`
 
 ```yaml
 # Workflow Name and Description (Required Fields)
 workflow:
-  version: "1.0"
+  version: "1.1"
   name: "Multi-turn Q&A"
   description: "A multi-turn Q&A workflow that retrieves information via search engines when needed."
-
-# LLM Settings (Required Fields)
-llm_settings:
-  # The provider must match a subsection name under llm_settings in config.py.
-  provider: "openai"
+  # The llm_provider must match a subsection name under llm_settings in config.py.
+  llm_provider: "openai"
 
 # External Function/Tool Settings (Optional; 'functions' is an array of multiple functions)
 functions:
@@ -202,12 +229,6 @@ agents:
     instruction: |
       You possess extensive knowledge but lack the latest real-time information. When conversing with users, adhere to the following principles:
       When the user's request contains words like "this year", "recently", "today", or "now", you should transfer it to the `Researcher` to retrieve real-time information.
-    # 'output' stores the agent's output result
-    output:
-      # In other agents or steps, you can reference this variable using {{ assistant_output }}
-      name: assistant_output
-      # Supports three output formats: string, list, or json. The default is string.
-      type: string
     # 'functions' includes a list of callable functions.
     functions:
       # The OpenAI API only supports function names in plain English
@@ -218,9 +239,6 @@ agents:
     instruction: |
       You are an experienced researcher skilled in retrieving the latest information related to the user's request using `web_search`. When handling user requests, adhere to the following principles:
       Prioritize timeliness and accuracy. When the user's request contains words like "this year", "today", "recently," or "now", first obtain the current time using `date`, then incorporate this time into the user's request.
-    output:
-      name: output
-      type: string
     functions:
       - web_search
       - date
@@ -243,6 +261,12 @@ steps:
     # prerequisite:
     #   - step1
     #   - step2
+    # 'output' stores the agent's output result
+    output:
+      # This variable can be referenced elsewhere by {{ assistant_output }}
+      name: assistant_output
+      # Supports three output formats: string, list, or json. The default is string.
+      type: string
     prerequisite: []
 ```
 
@@ -250,9 +274,10 @@ steps:
 
 ```yaml
 workflow:
-  version: "1.0"
+  version: "1.1"
   name: "Topic Debate"
   description: "Multi-agent group chat mode where the pro and con sides freely debate the topic."
+  llm_provider: "openai"
 
 agents:
   # ...
@@ -275,24 +300,32 @@ agents:
         "role": "Moderator",
         "content": <Your words>
       }
-    # 'stop_character' defines the stop token; the final output will ignore any content after this character
-    stop_character: "\n\n"
+    functions: []
+  # ...
+
+# Execution Steps
+steps:
+  # ...
+  - name: "Step-2"
+    description: "The selected speaker expresses their views or poses questions"
+    order: 2
+    agent: "{{ active_agent }}"
+    execution: sync
     # 'history_length' sets the number of historical conversations retained in 'messages' (corresponding 'role' fields are 'assistant' and 'user')
     history_length: 0
     output:
       name: speech
       type: json
-      # 'format' is optional and used to format the final output; this forces the output type to be converted to string
-      format: "{{ speech['role'] }}: {{ speech['content'] }}"
+      # `post_processing` is used to process llm output and generat the final output
+      post_processing: format_speech_content
       # 'append_to' is optional and used to append the output result to multiple variables for workflow or external code reference
       append_to:
         # Append new content to the 'conversation' variable ('conversation' is of type list)
         - variable: conversation
-    functions: []
-  # ...
-```
+    prerequisite: []
+ ```
 
-In `examples/debate_competition.py`, you can see how external code references the `conversation` variable specified in the `append_to` field.
+In `examples/debate_competition.py`, you can see how external code references the `conversation` variable specified in the `append_to` field, and how to use `post_processing`.
 
 ### 4.4. Jinja2 basic syntax
 
@@ -319,11 +352,11 @@ In `examples/debate_competition.py`, you can see how external code references th
 {% endfor %}
 ```
 
-For examples of how this is applied in workflows, refer to `data/guide_to_reading.yaml`.
+For examples of how this is applied in workflows, refer to `data/workflows/guide_to_reading.yaml`.
 
 ## 5. Future plans
 
-- [ ] **Integrate External Knowledge Bases**: Add support for Retrieval-Augmented Generation (RAG) in the workflow.
+- [X] **Integrate External Knowledge Bases**: Add support for Retrieval-Augmented Generation (RAG) in the workflow.
 
 ## 6. Reference
 

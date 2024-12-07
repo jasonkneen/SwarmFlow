@@ -1,8 +1,13 @@
 beautifulsoup4
+chromadb
 duckduckgo_search
 jinja2
+mpire
+ollama
 openai
+pymupdf
 pytz
 pyyaml
 requests
+sentence_transformers
 streamlit

@@ -1,0 +1,89 @@
+# 工作流设置
+workflow:
+  version: "1.1"
+  name: "基于知识库的多轮问答"
+  description: "多轮问答工作流，根据情况从知识库中检索内容。"
+  llm_provider: "openai"
+
+# 外部函数/工具设置
+functions:
+  - name: simple_rag
+    description: "从知识库中检索与用户请求相关的内容"
+    parameters:
+      type: object
+      properties:
+        rag_provider:
+          description: "RAG 服务提供者"
+          type: string
+          enum:
+            # 必须与 config.py 中 rag_settings 的子项名称匹配
+            - "openai"
+        kb_path:
+          description: "知识库路径"
+          type: string
+          enum:
+            - "../../data/knowledge_bases/vector_stores/example_cn"
+        kb_name:
+          description: "知识库名称"
+          type: string
+          enum:
+            - "default"
+        query:
+          description: "用户请求"
+          type: string
+      required:
+        - rag_provider
+        - kb_path
+        - kb_name
+        - query
+
+  - name: transfer_to_agent
+    description: "将用户请求转交给另一个 Agent"
+    parameters:
+      type: object
+      properties:
+        agent_name:
+          description: "转交给名为 <agent_name> 的 Agent"
+          type: string
+          enum:
+            - "RAG"
+        query:
+          description: "用户请求"
+          type: string
+      required:
+        - agent_name
+        - query
+
+# 多Agent设置
+agents:
+  - name: "AI 助手"
+    description: "AI 助手，负责分发任务，并向用户返回结果"
+    instruction: |
+      当用户请求涉及到下列内容时，使用`transfer_to_agent`转交给`RAG`处理：
+      ["CBT", "认知治疗", "行为治疗", "信念", "心理学", "心理健康", "抑郁症", "焦虑症"]
+
+      输出要求：
+      1. 不要改写`RAG`返回的知识库原文，不要做任何补充说明。
+      2. 如果知识库中没有相关内容，请回答“非常抱歉，知识库中没有相关内容。”"
+    functions:
+      - transfer_to_agent
+
+  - name: "RAG"
+    description: "从知识库中检索相关内容"
+    instruction: |
+      永远使用`simple_rag`从知识库中检索与用户请求相关的内容并输出结果。
+      输出要求：直接输出<KB>中的完整内容，不要改写<KB>原文，不要做任何补充说明。
+    functions:
+      - simple_rag
+
+# 工作流执行步骤
+steps:
+  - name: "Chat"
+    description: "多 Agent 协作，使用 RAG 技术提升输出质量"
+    order: 1
+    agent: "AI 助手"
+    execution: sync
+    output:
+      name: output
+      type: string
+    prerequisite: []
