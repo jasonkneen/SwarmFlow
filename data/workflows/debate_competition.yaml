@@ -4,7 +4,6 @@ workflow:
   name: "Topic Debate"
   description: "Multi-agent group chat mode where the pro and con sides freely debate the topic."
   llm_provider: "openai"
-  rag_provider: "ollama"
 
 # Multi-Agent Settings
 agents:
