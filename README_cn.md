@@ -123,8 +123,7 @@ python rag.py
 基本操作（以`basic.yalm`为例）：
 1. 点击“Browse files”按钮，从`data/workflows/cn`目录中选择`basic.yaml`，或者通过拖拽加载该文件；
 2. 查看或修改各项配置；
-3. 切换到“Test”标签页，在“User Input”输入框中贴入文章内容并键入回车键；
-4. 查看输出结果是否符合预期。
+3. 切换到“Test”标签页，在“User Input”中输入文字并回车。
 
 截图1：
 ![ui_edit](docs/resources/snapshot_simple_ui_1_cn.png)

@@ -130,8 +130,7 @@ Running `streamlit run simple_ui.py` will start the `streamlit` service in the b
 
 1. Click the "Browse files" button, select `basic.yaml` from the `data` directory, or drag and drop the file to load it.
 2. View or modify the configurations as needed.
-3. Switch to the "Test" tab, paste the article content into the "User Input" box, and press Enter.
-4. Check whether the output meets your expectations.
+3. Switch to the "Test" tab, enter text into the "User Input" box, and press Enter.
 
 Snapshot-1:
 ![ui_edit](docs/resources/snapshot_simple_ui_1.png)
