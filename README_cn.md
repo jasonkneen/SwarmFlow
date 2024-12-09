@@ -120,7 +120,7 @@ python rag.py
 
 运行`streamlit run simple_ui.py`会在后台启动`streamlit`服务，可通过浏览器访问`http://localhost:8501`打开 UI 页面，便于编辑和调试工作流。
 
-基本操作（以“文章导读”工作流为例）：
+基本操作（以`basic.yalm`为例）：
 1. 点击“Browse files”按钮，从`data/workflows/cn`目录中选择`basic.yaml`，或者通过拖拽加载该文件；
 2. 查看或修改各项配置；
 3. 切换到“Test”标签页，在“User Input”输入框中贴入文章内容并键入回车键；

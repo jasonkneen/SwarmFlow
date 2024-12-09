@@ -126,7 +126,7 @@ Snapshot:
 
 Running `streamlit run simple_ui.py` will start the `streamlit` service in the background. You can access the UI by visiting `http://localhost:8501` in your browser, making it easier to edit and debug workflows.
 
-**Basic Operations (using the "Article Guided Reading" workflow as an example):**
+**Basic Operations (using the `basic.yalm` as an example):**
 
 1. Click the "Browse files" button, select `basic.yaml` from the `data` directory, or drag and drop the file to load it.
 2. View or modify the configurations as needed.
