@@ -259,16 +259,12 @@ class WorkflowExecutor:
     def extract_json(self, text):
         res = None
 
-        patterns = [
-            r"\{[\s\S]*?\}",
-        ]
+        json_start = text.find("{")
+        json_end = text.rfind("}")
+        if json_start < 0 or json_end < 1:
+            return res
 
-        for pattern in patterns:
-            matches = re.findall(pattern, text)
-            if len(matches) < 1:
-                continue
-            res = json.loads(matches[0])
-            break
+        res = json.loads(text[json_start:json_end+1])
 
         return res
 
