@@ -215,6 +215,10 @@ class WorkflowExecutor:
         # Initialize the context used to pass variables between steps
         self.context_variables = {} if context_variables is None else context_variables
 
+        # Set global variables
+        if self.workflow.get("global_variables"):
+            self.context_variables.update(self.workflow["global_variables"])
+
         # The final output of the workflow
         self.output = ""
 
