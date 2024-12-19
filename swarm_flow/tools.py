@@ -1,13 +1,14 @@
-from duckduckgo_search import DDGS
-from datetime import datetime
 import pytz
 import requests
 import io
 import contextlib
+from openai import OpenAI
+from duckduckgo_search import DDGS
+from datetime import datetime
 from bs4 import BeautifulSoup
 
 from .rag.rag_simple import RAGSimple
-from .config import rag_settings, tool_settings
+from .config import llm_settings, rag_settings, tool_settings
 
 rag_clients = {}
 def simple_rag(rag_provider: str, kb_path: str, kb_name: str, query: str) -> str:
@@ -17,7 +18,7 @@ def simple_rag(rag_provider: str, kb_path: str, kb_name: str, query: str) -> str
     :param kb_path:
     :param kb_name:
     :param query:
-    :return: Results retrieved from the knowledge base
+    :return: Results retrieved from the knowledge base.
     """
     global rag_clients
 
@@ -29,6 +30,31 @@ def simple_rag(rag_provider: str, kb_path: str, kb_name: str, query: str) -> str
     knowledge_snippets = rag_client.search([query], top_k=5, kb_name=kb_name)
     knowledge = "\n\n---\n\n".join(knowledge_snippets["documents"][0])
     return f"<KB>\n{knowledge}\n</KB>"
+
+def describe_image(llm_provider: str, image_link: str, instruction: str) -> str:
+    """
+    Get the image from network and describe the image content.
+    :param llm_provider:
+    :param image_link:
+    :param instruction:
+    :return: Description of the image.
+    """
+    llm_params = llm_settings[llm_provider]
+    client = OpenAI(base_url=llm_params["base_url"], api_key=llm_params["api_key"])
+    response = client.chat.completions.create(
+        model=llm_params["default_model"],
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": instruction},
+                    {"type": "image_url", "image_url": {"url": image_link}}
+                ]
+            }
+        ],
+        max_tokens=500
+    )
+    return response.choices[0].message.content
 
 def execute_python_code(code: str) -> str:
     """
