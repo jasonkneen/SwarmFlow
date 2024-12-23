@@ -39,11 +39,12 @@ class RAGSimple(RAGBase):
             self.client = SentenceTransformer(self.embedding_model)
         elif self.rag_provider == "openai":
             import openai
-            self.client = openai
-            self.client.api_key = self.rag_params["api_key"]
+            api_key = self.rag_params["api_key"]
             base_url = self.rag_params.get("base_url")
             if base_url and len(base_url) > 0:
-                self.client.api_base = base_url
+                self.client = openai.Client(base_url=base_url, api_key=api_key)
+            else:
+                self.client = openai.Client(api_key=api_key)
         elif self.rag_provider == "ollama":
             import ollama
             # Initialize Ollama API

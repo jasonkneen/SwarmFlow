@@ -28,8 +28,7 @@ def simple_rag(rag_provider: str, kb_path: str, kb_name: str, query: str) -> str
         rag_clients[rag_provider] = rag_client
 
     knowledge_snippets = rag_client.search([query], top_k=5, kb_name=kb_name)
-    knowledge = "\n\n---\n\n".join(knowledge_snippets["documents"][0])
-    return f"<KB>\n{knowledge}\n</KB>"
+    return "\n\n".join(knowledge_snippets["documents"][0])
 
 def describe_image(llm_provider: str, image_link: str, instruction: str) -> str:
     """

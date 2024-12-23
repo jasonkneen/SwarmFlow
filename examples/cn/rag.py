@@ -1,4 +1,6 @@
 import asyncio
+import os
+
 import yaml
 import shutil
 import sys
@@ -35,7 +37,7 @@ if __name__ == "__main__":
     with open(workflow_config, "r", encoding="utf-8") as f:
         yaml_content = f.read()
 
-    if rebuild_kb:
+    if rebuild_kb and os.path.exists(kb_path):
         shutil.rmtree(kb_path)
 
     # Extract RAG settings
