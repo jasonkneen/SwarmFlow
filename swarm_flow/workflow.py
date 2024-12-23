@@ -42,8 +42,8 @@ class StepTask:
         output_type = step["output"].get("type", "string")
 
         # Check if there is a 'for_each' loop
-        if "for_each" in agent_params:
-            for_each = agent_params["for_each"]
+        if "for_each" in step:
+            for_each = step["for_each"]
             loop_item = for_each["item"]
             loop_list = context_variables.get(for_each["list"].strip())
             if not isinstance(loop_list, list):
