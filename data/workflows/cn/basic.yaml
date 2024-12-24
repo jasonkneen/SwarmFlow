@@ -75,7 +75,6 @@ agents:
       你是一名资深的 Python 程序员，负责在响应请求之前验证代码的正确性和效率。你的主要任务是通过编写和运行代码协助分析或研究。
       请编写 Python 代码完成用户描述的功能并输出结果。
     functions:
-      - transfer_to_agent
       - execute_python_code
 
   - name: "研究员"
