@@ -203,9 +203,10 @@ class WorkflowExecutor:
             agent = Agent(
                 name=a["name"],
                 description=a["description"],
-                model=self.llm_settings["default_model"],
+                model=a.get("model") or self.llm_settings["default_model"],
                 instructions=a["instruction"],
                 functions=functions,
+                tool_choice=a.get("tool_choice")
             )
 
             # Save agent for referencing in workflow
